@@ -3,12 +3,17 @@ import { countries } from "../../data/countries";
 import { SearchType } from "../../types";
 import styles from "./From.module.css";
 import Alert from "../Alert/Alert";
-const Form = () => {
+
+type FromProps = {
+  fechtWeather: (search: SearchType) => Promise<void>;
+};
+
+const Form = ({ fechtWeather }: FromProps) => {
   const [search, setSearch] = useState<SearchType>({
     city: "",
     country: "",
   });
-  const [alert, setAlert]= useState("")
+  const [alert, setAlert] = useState("");
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -23,20 +28,14 @@ const Form = () => {
     e.preventDefault();
     if (Object.values(search).includes("")) {
       setAlert("Todos los campos son necesarios");
+      return;
     }
-
-    // Call your API here with the search query
-    // console.log(search);
-    // setSearch({ city: "", country: "" }); // Clear the form fields after submission
+    fechtWeather(search);
   };
 
   return (
-
-   
     <form className={styles.form} onSubmit={handleSubmit}>
-       {
-      alert && <Alert>{alert}</Alert>
-    }
+      {alert && <Alert>{alert}</Alert>}
       <div className={styles.field}>
         <label htmlFor="city">Ciudad</label>
         <input
